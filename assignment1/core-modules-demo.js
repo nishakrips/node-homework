@@ -10,14 +10,14 @@ console.log(`Platform: ${os.platform()}`)
 console.log(`CPU: ${os.cpus().length}`)
 console.log(`Total Memory: ${os.totalmem()}`)
 
-const joinedPath = path.join(sampleFilesDir, "largefile.txt")
+const joinedPath = path.join(sampleFilesDir, "demo.txt")
 console.log(`Joined path: ${joinedPath}`)
 
 fsp
   .writeFile(joinedPath, "Hello from fs.promises")
   .then(() => fsp.readFile(joinedPath, "utf8"))
   .then((content) => {
-    // console.log(`fs.promises read: ${content}`)
+    console.log(`fs.promises read: ${content}`)
   })
   .catch((err) => {
     console.log("Error reading file:", err.message)
@@ -32,10 +32,10 @@ for (let i = 0; i < 50; i++) {
 }
 
 writeStream.on("finish", () => {
-  // console.log("Finished writing large file with streams.")
+  console.log("Finished writing large file with streams.")
 
   const readStream = fs.createReadStream(
-    path.join(sampleFilesDir, "largefile.txt"),
+    path.join(sampleFilesDir, "demo.txt"),
     {
       encoding: "utf8",
     },
