@@ -20,7 +20,7 @@ fs.writeFile(sampleFilePath, "Hello, async world!", (err) => {
       return
     }
 
-    console.log(`callback: ${content}`)
+    console.log(`Callback read: ${content}`)
   })
 })
 
@@ -29,7 +29,7 @@ fspromise
   .writeFile(sampleFilePath, "Hello, async world!")
   .then(() => fspromise.readFile(sampleFilePath, "utf8"))
   .then((content) => {
-    console.log(`promise: ${content}`)
+    console.log(`Promise read: ${content}`)
   })
   .catch((err) => {
     console.log("File read failed:", err.message)
@@ -41,7 +41,7 @@ async function run() {
     await fspromise.writeFile(sampleFilePath, "Hello, async world!")
     const content = await fspromise.readFile(sampleFilePath, "utf8")
 
-    console.log(`async/await: ${content}`)
+    console.log(`Async/Await read: ${content}`)
   } catch (err) {
     console.log("File operation failed:", err.message)
   }

@@ -7,14 +7,19 @@ const sampleFilesDir = path.join(__dirname, "sample-files")
 fs.mkdirSync(sampleFilesDir, { recursive: true })
 
 console.log(`Platform: ${os.platform()}`)
-console.log(`CPU: ${os.cpus().length}`)
+console.log(
+  `CPU: ${os
+    .cpus()
+    .map((cpu) => cpu.model)
+    .join(", ")}`,
+)
 console.log(`Total Memory: ${os.totalmem()}`)
 
 const joinedPath = path.join(sampleFilesDir, "demo.txt")
 console.log(`Joined path: ${joinedPath}`)
 
 fsp
-  .writeFile(joinedPath, "Hello from fs.promises")
+  .writeFile(joinedPath, "Hello from fs.promises!")
   .then(() => fsp.readFile(joinedPath, "utf8"))
   .then((content) => {
     console.log(`fs.promises read: ${content}`)
@@ -35,7 +40,7 @@ writeStream.on("finish", () => {
   console.log("Finished writing large file with streams.")
 
   const readStream = fs.createReadStream(
-    path.join(sampleFilesDir, "demo.txt"),
+    path.join(sampleFilesDir, "largefile.txt"),
     {
       encoding: "utf8",
     },
