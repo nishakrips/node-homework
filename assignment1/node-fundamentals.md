@@ -22,18 +22,31 @@ Chat api, servers, web api's, command line tools etc
 
 ## Explain the difference between CommonJS and ES Modules. Give a code example of each.
 
+Browser side Javascript and React uses ES Modules syntax to import modules, where as
+Server side Javascript run with Node uses Common JS syntax to import modules.
+They essentially represent syntax difference in two environments for importing modules.
+They also differ in syntax in the way they export functions.
+CommonJS uses module.exports with a list of functions.
+ES Modules uses keyord export followed by function name to export the
+function to be shared with other parts of the program.
+
 **CommonJS (default in Node.js):**
 
 ```js
 // Answer here..
-CommonJS syntax uses require to import modules
-const fs = require("fs");
+CommonJS syntax uses keyword require to import modules or functions.
+const fs = require("fs"); //imports the module fs into the code
+
+Common JS syntax for exporting modules..
+module.exports = {fs} //exports module fs to be shared across the code..
 ```
 
 **ES Modules (supported in modern Node.js):**
 
 ```js
 // Answer here..
-ES Module syntax uses import syntax to import functions from files
-import {useState} from "react";
+ES Module syntax uses keyword import syntax to import modules or functions from files
+import {useState} from "react";//imports useState from react package.
+
+export useState; //exports useState from React package to be used by other programs.
 ```
