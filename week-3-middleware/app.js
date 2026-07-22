@@ -6,12 +6,18 @@ const dogsRouter = require("./routes/dogs")
 const app = express()
 
 function errorHandler(err, req, res, next) {
-  console.error(err)
-  res.status(500).json({
+  const statusCode = err.statusCode || 500
+
+  if (statusCode >= 400 && statusCode < 500) {
+    console.warn(`WARN: ${err.name} - ${err.message}`)
+  } else {
+    console.error(`ERROR: ${err.name} - ${err.message}`)
+  }
+
+  res.status(statusCode).json({
+    error: statusCode === 500 ? "Internal Server Error" : err.message,
     requestId: req.requestId,
-    error: "Internal Server Error",
   })
-  next(err)
 }
 
 function notFound(req, res) {
@@ -19,6 +25,16 @@ function notFound(req, res) {
     requestId: req.requestId,
     error: `Route not found`,
   })
+}
+
+function contentTypeValidator(req, res, next) {
+  if (req.method !== "GET" && req.get("Content-Type") !== "application/json") {
+    return res.status(400).json({
+      requestId: req.requestId,
+      error: "Content-Type must be application/json",
+    })
+  }
+  next()
 }
 
 function logger(req, res, next) {
@@ -29,16 +45,20 @@ function logger(req, res, next) {
 }
 
 // Assignment 3b and 3c ask you to add middleware in this file.
-app.use(express.json())
+app.use(express.json({ limit: "1mb" }))
 app.use(express.static("week-3-middleware/public"))
 
 app.use((req, res, next) => {
   req.requestId = randomUUID()
   res.setHeader("X-Request-Id", req.requestId)
   res.setHeader("X-App-Name", "Node Homework")
+  res.setHeader("X-Content-Type-Options", "nosniff")
+  res.setHeader("X-Frame-Options", "DENY")
+  res.setHeader("X-XSS-Protection", "1; mode=block")
   next()
 })
 app.use(logger)
+app.use(contentTypeValidator)
 
 app.use("/", dogsRouter) // Do not remove this line
 app.use(notFound)
